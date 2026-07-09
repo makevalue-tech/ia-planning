@@ -1,57 +1,39 @@
-Diretrizes dos agentes de IA do framework MakeValue IA. Espelha a pasta .agentes/ do projeto. Cada página filha é o prompt de um agente — a Claude lê a página via MCP e age como aquele agente.
+# MakeValue IA
 
-Agentes
+**MakeValue IA** é o framework de produto e os agentes de IA que apoiam o ciclo **refinamento → desenvolvimento → review → finalização**. Esta área é a **fonte de verdade** que os agentes consultam para trabalhar já com o contexto de cada produto.
 
-Agente
+## O que é
 
-Papel
+Em vez de espalhar regras de negócio em vários lugares, centralizamos aqui: cada produto tem seu framework (em **Skills**) e cada agente de IA tem sua diretriz (em **Agentes**). O time conversa com a Claude, que lê estas páginas e age como o agente certo — sem ninguém precisar colar instruções longas.
 
-Status
+| Pasta | Conteúdo |
+| --- | --- |
+| **Agentes** | Diretrizes dos agentes de IA (hoje: **planning-agent**; em breve finalization / dev / review) |
+| **Skills** | Base de conhecimento por produto — visão de negócio, arquitetura, histórico. É o que os agentes leem antes de refinar. |
+| **Design System (kit de protótipo)** | Kit HTML/CSS com a cara da plataforma. O planning-agent parte dele para os protótipos ficarem parecidos com o produto real. |
 
-planning-agent
+## Para o time de Produto — passo a passo
 
-Refinamento de negócio com o PM — gera escopo + protótipo
+**Pré-requisito (uma vez só):** no **app da Claude** (desktop), conecte o conector da **Atlassian** em Configurações → Conectores e autorize o acesso (Confluence + Jira). É isso que permite a Claude ler este framework e criar a story no final.
 
+1. **Abra o app da Claude** e comece uma nova conversa.
+2. **Dê o init do planning-agent** — cole a frase abaixo trocando o produto (banking | ft | backoffice | produto novo):
 
+   ```
+   Siga a diretriz do planning-agent do MakeValue IA:
+   https://make-value.atlassian.net/wiki/spaces/Cloud/pages/48496641 — refine comigo uma story de banking.
+   ```
 
-finalization-agent
+   A Claude abre essa página, lê a diretriz e o framework do produto, e começa a entrevista — você não cola mais nada.
 
-Promove o escopo para o framework (Skills) e adiciona doc técnica, após o desenvolvimento
+3. **Descreva sua ideia** livremente. Como a Claude já tem o contexto do produto, ela pergunta só o que falta.
+4. **Refine pelo protótipo** — a Claude gera um protótipo navegável com a cara da plataforma. Clique nos estados (vazio, erro, borda); cada ajuste que você pedir atualiza o escopo junto.
+5. **Feche e publique** — quando estiver bom, confirme. A Claude cria a **story no Jira** (projeto CLOUD) com o escopo completo e o protótipo num comentário. _Pronto — a story é o entregável; a doc de produto será atualizada na finalização._
 
+**Sempre comece pelo init.** O app da Claude não guarda a diretriz — ele lê a página do Confluence na hora, então você sempre trabalha com a versão mais recente. Não é preciso copiar markdown nem manter instruções salvas.
 
+## Para o time de Dev
 
-dev-agent
+**Em breve** — o passo a passo de desenvolvimento e finalização (finalization-agent) será adicionado aqui quando esses agentes forem criados.
 
-Apoio ao desenvolvimento
-
-
-
-review-agent
-
-Revisão
-
-
-
-Fluxo do planning-agent
-
-A diretriz completa está na página filha planning-agent. O PM dá o init no app da Claude e o agente percorre estes passos:
-
-Init: Siga a diretriz do planning-agent do MakeValue IA: https://make-value.atlassian.net/wiki/spaces/Cloud/pages/48496641 — refine comigo uma story de banking.
-
-Identificar produto e task — produto existente (banking | ft | backoffice) ou produto novo (POC / validação de mercado, sem histórico). Define um ID no padrão TASK-XXX-nome-curto-produto.
-
-Absorver contexto — a Claude lê via MCP o framework do produto em Skills antes de qualquer pergunta. Produto novo pula este passo.
-
-Entender a ideia — o PM descreve livremente; o agente reformula em 3-5 linhas para confirmar.
-
-Entrevista cirúrgica — pergunta SÓ o que o framework/histórico não responde, e levanta conflitos com regras existentes.
-
-Gerar o escopo — regras numeradas e testáveis (viram critério de aceite).
-
-Gerar o protótipo — entregue como artifact navegável, mostrando os estados (vazio, sucesso, erro, borda) para revelar regras que faltavam.
-
-Loop de refinamento — a cada ajuste do PM, atualiza protótipo e escopo juntos.
-
-Handoff — com a confirmação do PM: cria a story no projeto CLOUD (board 308, tipo História, sem responsável) com o escopo completo na descrição, e adiciona o protótipo num comentário com seção "Expandir" (HTML em code block recolhível — o conector não anexa arquivo). Não cria página de escopo no Confluence — a story do Jira já é a fonte completa; a doc de produto (Skills) é atualizada depois pelo finalization-agent.
-
-O protótipo é uma ferramenta de descoberta, não enfeite: ao clicar nos estados, o PM percebe regras que faltavam. Toda regra revelada volta para o escopo.
+Produtos cobertos hoje: **Banking** (documentado), **FT** e **Backoffice** (a preencher). Produtos novos (POC / validação de mercado) entram sem framework histórico.
